@@ -7,12 +7,14 @@ import com.vaadin.flow.component.login.AbstractLogin;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.PWA;
 import com.vaadin.flow.server.VaadinSession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Objects;
 
 @Route(value = "")
+@PWA(name = "Üye yönetim uygulamas", shortName = "Üye Yönetim")
 public class LoginView extends VerticalLayout {
 
     @Autowired
