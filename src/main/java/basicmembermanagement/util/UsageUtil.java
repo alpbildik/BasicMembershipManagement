@@ -20,8 +20,7 @@ public class UsageUtil {
     }
 
     public static Expense calculateFromExpense(UsageDTO usageDTO, Double unitPrice) {
-        BigDecimal amount = BigDecimal.valueOf(usageDTO.getNewUsageRecord())
-                .subtract(BigDecimal.valueOf(usageDTO.getLastUsageRecord()))
+        BigDecimal amount = usageDTO.getDifference()
                 .multiply(BigDecimal.valueOf(unitPrice));
 
         Expense expense = new Expense();

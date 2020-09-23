@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
@@ -31,6 +32,10 @@ public class UsageDTO implements Serializable {
     private Double lastUsageRecord;
     private Double newUsageRecord;
 
+
+    public BigDecimal getDifference(){
+        return BigDecimal.valueOf(newUsageRecord).subtract(BigDecimal.valueOf(lastUsageRecord));
+    }
 }
 
 

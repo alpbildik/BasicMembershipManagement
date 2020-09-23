@@ -8,9 +8,12 @@ import basicmembermanagement.exception.ValidationException;
 import basicmembermanagement.service.ExpenseService;
 import basicmembermanagement.service.UsageService;
 import basicmembermanagement.util.ConfirmationDialog;
+import basicmembermanagement.util.RedirectionUtil;
 import basicmembermanagement.util.UsageValidationUtil;
 import basicmembermanagement.util.Util;
 import basicmembermanagement.view.LoginRequiredView;
+import basicmembermanagement.view.member.MemberView;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -213,21 +216,20 @@ public class UsageView  extends LoginRequiredView {
         if (usageTypeComboBox.getValue().isAllNecessary) {
             expenseService.createCommonExpense(BigDecimal.valueOf(unitAmount.getValue()), ExpenseType.findFromUsageType(usageTypeComboBox.getValue()), descriptionField.getValue());
         } else {
-            List<Member> effectedMembers = usages.get(usageTypeComboBox.getValue()).stream()
-                    .filter(usages -> Objects.nonNull(usages.getNewUsageRecord()))
-                    .map(UsageDTO::getMember)
-                    .collect(Collectors.toList());
-
-            expenseService.createExpense(effectedMembers, BigDecimal.valueOf(unitAmount.getValue()), ExpenseType.findFromUsageType(usageTypeComboBox.getValue()), descriptionField.getValue());
+            expenseService.createExpense(usages.get(usageTypeComboBox.getValue()), BigDecimal.valueOf(unitAmount.getValue()), ExpenseType.findFromUsageType(usageTypeComboBox.getValue()), descriptionField.getValue());
         }
 
-        ConfirmationDialog confirmDialog = new ConfirmationDialog("", "İşlem başarılı", e -> {});
+        ConfirmationDialog confirmDialog = new ConfirmationDialog("", "İşlem başarılı", e -> {
+            UI.getCurrent().navigate(MemberView.class);
+        });
         confirmDialog.open();
     }
 
     private void saveUsages(List<UsageDTO> usages) {
         usageService.saveUsages(usages, unitAmount.getValue(), isFirstInput);
-        ConfirmationDialog confirmDialog = new ConfirmationDialog("", "İşlem başarılı", e -> {});
+        ConfirmationDialog confirmDialog = new ConfirmationDialog("", "İşlem başarılı", e -> {
+            UI.getCurrent().navigate(MemberView.class);
+        });
         confirmDialog.open();
     }
 
@@ -236,6 +238,7 @@ public class UsageView  extends LoginRequiredView {
             return unitAmount.getValue() * usageByType.size();
         } else {
             return usageDTOS.stream()
+                    .filter(usageDTO -> Objects.nonNull(usageDTO.getNewUsageRecord()))
                     .mapToDouble(usageDTO -> unitAmount.getValue() * (usageDTO.getLastUsageRecord() - usageDTO.getNewUsageRecord()))
                     .reduce(0.0, Double::sum);
         }

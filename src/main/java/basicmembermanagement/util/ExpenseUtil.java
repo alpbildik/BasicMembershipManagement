@@ -1,6 +1,7 @@
 package basicmembermanagement.util;
 
 import basicmembermanagement.dto.ExpenseSummation;
+import basicmembermanagement.dto.UsageDTO;
 import basicmembermanagement.entity.Expense;
 import basicmembermanagement.entity.Member;
 import basicmembermanagement.enums.ExpenseType;
@@ -72,4 +73,5 @@ public class ExpenseUtil {
         return expenseList.stream().map(ExpenseUtil::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add).toString();
     }
+
 }
