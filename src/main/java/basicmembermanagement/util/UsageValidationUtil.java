@@ -16,21 +16,22 @@ public class UsageValidationUtil {
         }
 
 
-        //Necessary for unit usage Electricity and Water
-        if (usageType.isAllNecessary) {
-            if (isFirstInput && usageToValidate.stream().anyMatch(usage -> Objects.isNull(usage.getLastUsageRecord()))) {
+
+        if (usageType.isIndividual) {
+            //Necessary for unit usage Electricity and Water
+            if (usageType.isAllNecessary) {
+                if (isFirstInput && usageToValidate.stream().anyMatch(usage -> Objects.isNull(usage.getLastUsageRecord()))) {
                     throw new ValidationException("Üye ilk endex boş olamaz");
-            }
+                }
 
-            if (usageToValidate.stream().anyMatch(usage -> Objects.isNull(usage.getNewUsageRecord()))) {
-                throw new ValidationException("Üye son endeks boş olamaz");
-            }
-        }
+                if (usageToValidate.stream().anyMatch(usage -> Objects.isNull(usage.getNewUsageRecord()))) {
+                    throw new ValidationException("Üye son endeks boş olamaz");
+                }
 
-        //Other indiv expenses
-        if (usageType.isIndividual && !usageType.isAllNecessary) {
-            if (StringUtils.isEmpty(description)) {
-                throw new ValidationException("Açıklama alanı boş olamaz");
+            } else {
+                if (StringUtils.isEmpty(description)) {
+                    throw new ValidationException("Açıklama alanı boş olamaz");
+                }
             }
         }
 
