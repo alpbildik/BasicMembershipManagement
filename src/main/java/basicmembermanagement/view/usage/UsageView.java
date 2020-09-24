@@ -1,16 +1,13 @@
 package basicmembermanagement.view.usage;
 
 import basicmembermanagement.dto.UsageDTO;
-import basicmembermanagement.entity.Member;
 import basicmembermanagement.enums.ExpenseType;
 import basicmembermanagement.enums.UsageType;
 import basicmembermanagement.exception.ValidationException;
 import basicmembermanagement.service.ExpenseService;
 import basicmembermanagement.service.UsageService;
 import basicmembermanagement.util.ConfirmationDialog;
-import basicmembermanagement.util.RedirectionUtil;
 import basicmembermanagement.util.UsageValidationUtil;
-import basicmembermanagement.util.Util;
 import basicmembermanagement.view.LoginRequiredView;
 import basicmembermanagement.view.member.MemberView;
 import com.vaadin.flow.component.UI;
@@ -20,7 +17,6 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.editor.Editor;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
@@ -35,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Route(value = "usage")
 @Theme(value = Material.class)
@@ -165,6 +160,10 @@ public class UsageView  extends LoginRequiredView {
         binder.bind(lastUsageField, "lastUsageRecord");
         lastUsageColumn.setEditorComponent(lastUsageField);
 
+        grid.addItemClickListener(event -> {
+            grid.getEditor().editItem(event.getItem());
+            newUsageField.focus();
+        });
 
         grid.addItemDoubleClickListener(event -> {
             grid.getEditor().editItem(event.getItem());
